@@ -1,0 +1,5 @@
+package com.weshopify.platform.service;
+
+public class UserAuthnServiceImpl {
+
+}

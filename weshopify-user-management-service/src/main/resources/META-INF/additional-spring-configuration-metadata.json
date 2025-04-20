@@ -1,0 +1,32 @@
+{"properties": [
+  {
+    "name": "iamserver.base-url",
+    "type": "java.lang.String",
+    "description": "A description for 'iamserver.base-url'"
+  },
+  {
+    "name": "iamserver.role-api",
+    "type": "java.lang.String",
+    "description": "A description for 'iamserver.role-api'"
+  },
+  {
+    "name": "iamserver.user-api",
+    "type": "java.lang.String",
+    "description": "A description for 'iamserver.user-api'"
+  },
+  {
+    "name": "iamserver.username",
+    "type": "java.lang.String",
+    "description": "A description for 'iamserver.username'"
+  },
+  {
+    "name": "iamserver.password",
+    "type": "java.lang.String",
+    "description": "A description for 'iamserver.password'"
+  },
+  {
+    "name": "iamserver.role-api-schema",
+    "type": "java.lang.String",
+    "description": "A description for 'iamserver.role-api-schema'"
+  }
+]}

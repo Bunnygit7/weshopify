@@ -1,0 +1,38 @@
+package com.weshopify.platform.model;
+
+import java.io.Serializable;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.weshopify.platform.beans.RoleBean;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Wso2User implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5367746983692796658L;
+
+//	@JsonIgnore
+	private String id;
+	private String[] schemas;
+	private FullName name;
+	private String userName;
+	private String password;
+	private String[] emails;
+	@JsonIgnore
+	private List<RoleBean> roles;
+	private List<Wso2UserPhoneNumber> phoneNumbers;
+	
+}

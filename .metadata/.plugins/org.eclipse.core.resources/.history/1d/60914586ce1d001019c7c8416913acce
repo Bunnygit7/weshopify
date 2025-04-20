@@ -1,0 +1,60 @@
+package com.weshopify.platform.service;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.weshopify.platform.beans.UserAuthnBean;
+import com.weshopify.platform.model.WSO2UserAuthnBean;
+import com.weshopify.platform.outbound.IamAuthnCommunicator;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Slf4j
+public class UserAuthnServiceImpl implements UserAuthnService{
+
+	@Autowired
+	IamAuthnCommunicator authnCommunicator;
+	@Autowired
+	ObjectMapper objectMapper;
+	
+	@Autowired
+	private RedisTemplate<String, String> redisTemplate;
+
+	HashOperations<String, String, String> hashOps = null;
+	
+	public UserAuthnServiceImpl() {
+		this.hashOps = redisTemplate.opsForHash();
+	}
+	@Override
+	public String authenticate(UserAuthnBean authnBean) {
+		
+		WSO2UserAuthnBean userAuthnBean=WSO2UserAuthnBean
+										.builder()
+										.username(authnBean.getUserName())
+										.password(authnBean.getPassword())
+										.build();
+		String authnResponse=authnCommunicator.authenticate(userAuthnBean);
+		if(StringUtils.isNoneEmpty(authnResponse)) {
+			JSONObject json = new JSONObject(authnResponse);
+			String access_token = json.getString("access_token");
+			String randomHash = authnBean.getUserName() + "_" + RandomStringUtils.random(512);
+			hashOps.put(authnBean.getUserName(), randomHash, access_token);
+
+		}
+		return authnResponse;
+	}
+	@Override
+	public String logout(String accessToken) {
+		
+		return authnCommunicator.logout(accessToken);
+		
+	}
+
+}

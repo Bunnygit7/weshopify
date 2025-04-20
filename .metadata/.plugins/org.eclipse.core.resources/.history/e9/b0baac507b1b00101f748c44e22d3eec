@@ -1,0 +1,21 @@
+package com.weshopify.platform;
+
+import org.apache.tomcat.util.net.SSLUtil;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+public class AuthnApiTest {
+	
+
+	
+	
+	@Autowired
+	private SSLUtil sslUtil;
+	
+	@Test
+	public void testFindAllRoles() throws Exception {
+		sslUtil.disableSSLValidation();
+		roleClient.findAllRoles();
+	}
+
+}

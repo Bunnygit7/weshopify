@@ -1,0 +1,10 @@
+package com.weshopify.platform.service;
+
+import com.weshopify.platform.beans.UserAuthnBean;
+
+public interface UserAuthnService {
+	
+	public String authenticate(UserAuthnBean authnBean);
+	
+	public void logout(String token);
+}

@@ -1,0 +1,95 @@
+package com.weshopify.platform.outbound;
+
+import java.util.Base64;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.weshopify.platform.model.WSO2UserAuthnBean;
+
+import lombok.extern.slf4j.Slf4j;
+@Component
+@Slf4j
+public class IamAuthnCommunicator {
+	@Autowired
+	RestTemplate restTemplate;
+	@Autowired
+	ObjectMapper objectMapper;
+	
+	@Value("${weshopify.oauth2.uri}")
+	private String authnUri;
+	@Value("${weshopify.oauth2.clientId}")
+	private String clientId;
+	@Value("${weshopify.oauth2.clientSecret}")
+	private String clientSecret;
+	@Value("${weshopify.oauth2.grantType}")
+	private String grantType;
+	@Value("${weshopify.oauth2.scope}")
+	private String scope;
+	@Value("${weshopify.oauth2.logoutUri}")
+	private String logoutUri;
+	public String authenticate(WSO2UserAuthnBean authnBean) {
+		String response=null;
+		authnBean.setGrant_type(grantType);
+		authnBean.setScope(scope);
+				try {
+			String payload=objectMapper.writeValueAsString(authnBean);
+			HttpEntity<String> requestBody=prepareRequestBody(payload);
+			ResponseEntity<String> apiResponse=restTemplate.exchange(authnUri, HttpMethod.POST, requestBody, String.class);
+			
+			if(apiResponse.getStatusCode().value()==HttpStatus.OK.value()) {
+//				log.info(apiResponse.getBody());
+				response=apiResponse.getBody();
+			}
+			
+		} catch (JsonProcessingException e) {
+			
+			e.printStackTrace();
+		}
+		
+		return Optional.ofNullable(response).get();
+	}
+	
+	public String logout(String token) {
+		HttpEntity<String> requestBody=prepareRequestBody(token);
+		log.info(token);
+		log.info(logoutUri);
+		log.info(requestBody.toString());
+		ResponseEntity<String> apiResponse=restTemplate.exchange(logoutUri, HttpMethod.POST, requestBody, String.class);
+		log.info(apiResponse.getBody());
+
+		if(apiResponse.getStatusCode().value()==HttpStatus.OK.value()) {
+			log.info(apiResponse.getBody());
+		}
+		return null;
+		
+	}
+
+	public HttpEntity<String> prepareRequestBody(String payload) {
+
+		String combinedCreds = clientId + ":" + clientSecret;
+
+		String encodedAdminCreds = Base64.getEncoder().encodeToString(combinedCreds.getBytes());
+//		log.info(encodedAdminCreds);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", "Basic " + encodedAdminCreds);
+
+		
+			headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+			HttpEntity<String> requestBody = new HttpEntity<>(payload, headers);
+		
+
+		return requestBody;
+	}
+}

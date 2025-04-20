@@ -1,0 +1,5 @@
+package com.weshopify.platform.model;
+
+public class WSO2UserToken {
+
+}

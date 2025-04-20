@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: weshopify-user-management-service
+server:
+  port: 5014
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+iamserver:
+   base-url: https://localhost:9443/scim2
+   role-api: /Roles
+   user-api: /Users
+   username: admin
+   password: admin
+   role-api-schema: urn:ietf:params:scim:schemas:extension:2.0:Role

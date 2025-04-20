@@ -1,0 +1,5 @@
+package com.weshopify.platform.exceptions;
+
+public class APIException extends Exception{
+
+}

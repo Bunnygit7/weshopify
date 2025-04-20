@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: weshopify-authn-service
+server:
+  port: 5022
+weshopify:
+   oauth:
+      clientId: ofFfsSaLrF4Vec_o4dsAwSWS72ka
+      clientSecret: HEgOiwXoI1XRTp73d_m65S4pliIa
+      grantType: password
+      scope: openid

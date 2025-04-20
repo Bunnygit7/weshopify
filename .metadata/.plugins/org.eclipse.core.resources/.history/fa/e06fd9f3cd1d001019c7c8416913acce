@@ -1,0 +1,34 @@
+package com.weshopify.platform.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.weshopify.platform.beans.UserAuthnBean;
+import com.weshopify.platform.model.WSO2UserAuthnBean;
+import com.weshopify.platform.outbound.IamAuthnCommunicator;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Slf4j
+public class UserAuthnServiceImpl implements UserAuthnService{
+
+	@Autowired
+	IamAuthnCommunicator authnCommunicator;
+	@Autowired
+	ObjectMapper objectMapper;
+	@Override
+	public String authenticate(UserAuthnBean authnBean) {
+		
+		WSO2UserAuthnBean userAuthnBean=WSO2UserAuthnBean.builder().username(authnBean.getUserName()).password(authnBean.getPassword()).build();
+		return authnCommunicator.authenticate(userAuthnBean);
+	}
+	@Override
+	public String logout(String accessToken) {
+		
+		return authnCommunicator.logout(accessToken);
+		
+	}
+
+}

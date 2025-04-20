@@ -1,0 +1,24 @@
+package com.weshopify.platform.beans;
+
+import java.io.Serializable;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserAuthnBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6374797203831860206L;
+
+	private String userName;
+	private String password;
+	
+}
