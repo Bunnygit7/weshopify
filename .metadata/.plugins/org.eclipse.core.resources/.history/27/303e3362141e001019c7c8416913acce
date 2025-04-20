@@ -89,6 +89,7 @@ public class IamAuthnCommunicator {
 
 		if (apiResponse.getStatusCode().value() == HttpStatus.OK.value()) {
 			response = "Logout done Successfully!!";
+//			hashOps.delete(, );
 
 		}
 
