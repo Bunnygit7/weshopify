@@ -1,0 +1,36 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ffec02f5247, pid=36512, tid=25516
+#
+# JRE version: Java(TM) SE Runtime Environment (17.0.8+9) (build 17.0.8+9-LTS-211)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (17.0.8+9-LTS-211, mixed mode, emulated-client, sharing, tiered, compressed oops, compressed class ptrs, g1 gc, windows-amd64)
+# Problematic frame:
+# V  [jvm.dll+0x385247]
+#
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   https://bugreport.java.com/bugreport/crash.jsp
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=56860 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=localhost -Dspring.jmx.enabled=true -Dmanagement.endpoints.jmx.exposure.include=* -Dspring.application.admin.enabled=true -XX:TieredStopAtLevel=1 -Dspring.boot.project.name=weshopify-category-service -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -XX:+ShowCodeDetailsInExceptionMessages com.weshopify.platform.WeshopifyCategoryServiceApplication --spring.output.ansi.enabled=always
+
+Host: AMD Ryzen 5 5500U with Radeon Graphics         , 12 cores, 7G,  Windows 11 , 64 bit Build 26100 (10.0.26100.3912)
+Time: Thu May 15 21:29:43 2025 India Standard Time elapsed time: 20896.245654 seconds (0d 5h 48m 16s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00000234f796a090):  JavaThread "grpc-nio-worker-ELG-8108-2" daemon [_thread_in_vm, id=25516, stack(0x000000cfab800000,0x000000cfab900000)]
+
+Stack: [0x000000cfab800000,0x000000cfab900000],  sp=0x000000cfab8ff800,  free space=1022k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x385247]
+V  [jvm.dll+0x677c32]
+V  [jvm.dll+0x385e8b]
+V  [jvm.dll+0x386117]
+V  [jvm.dll+0x40c8be]
+V  [jvm.dll+0x78e7bc]
+V  [jvm.dll+0x788bba]

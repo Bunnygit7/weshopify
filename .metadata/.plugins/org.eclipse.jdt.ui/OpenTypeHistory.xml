@@ -1,2 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<typeInfoHistroy/>
+<typeInfoHistroy>
+    <typeInfo handle="=weshopify-category-service/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.weshopify.platform.service{CategoryService.java[CategoryService" modifiers="513" timestamp="1746264010463"/>
+    <typeInfo handle="=weshopify-brands-service/C:\/Users\/bathu\/.m2\/repository\/org\/springframework\/data\/spring-data-mongodb\/4.4.5\/spring-data-mongodb-4.4.5.jar=/maven.pomderived=/true=/=/maven.groupId=/org.springframework.data=/=/maven.artifactId=/spring-data-mongodb=/=/maven.version=/4.4.5=/=/maven.scope=/compile=/=/maven.pomderived=/true=/&lt;org.springframework.data.mongodb.repository(MongoRepository.class[MongoRepository" modifiers="1537" timestamp="1746342363741"/>
+</typeInfoHistroy>

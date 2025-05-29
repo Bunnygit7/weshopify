@@ -1,0 +1,82 @@
+spring:
+  application:
+    name: weshopify-brands-service
+  data:
+    mongodb:
+      uri: ${MONGO_DB_URI:mongodb+srv://mongo:mongo@cluster0.czfqryz.mongodb.net/}
+      database: weshopify
+      auto-index-creation: ${MONGO_DBAUTO_INDEX:true}
+    redis:
+       host: '${CATEGORIES_REDIS_HOST:localhost}'
+       port: '${CATEGORIES_REDIS_PORT:6379}'
+       password: '${CATEGORIES_REDIS_PASSWORD:Redis123$}'
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  tracing:
+    sampling:
+      probability: 1.0
+server:
+  port: ${BRAND_SERVICE_PORT:5017}
+
+service:
+   categories:
+      uri: http://${CATEGORY_SERVICE_HOST:localhost}:${CATEGORY_SERVICE_PORT:5016}
+#      token: eyJ4NXQiOiJNREpsTmpJeE4yRTFPR1psT0dWbU1HUXhPVEZsTXpCbU5tRmpaalEwWTJZd09HWTBOMkkwWXpFNFl6WmpOalJoWW1SbU1tUTBPRGRpTkRoak1HRXdNQSIsImtpZCI6Ik1ESmxOakl4TjJFMU9HWmxPR1ZtTUdReE9URmxNekJtTm1GalpqUTBZMll3T0dZME4ySTBZekU0WXpaak5qUmhZbVJtTW1RME9EZGlORGhqTUdFd01BX1JTMjU2IiwidHlwIjoiYXQrand0IiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJhMzE3ODBiZi1iMjc2LTRkOWItOWY2Yi0yZmI0NTliYWE0N2EiLCJhdXQiOiJBUFBMSUNBVElPTl9VU0VSIiwid2VzaG9waWZ5VXNlcklkIjoiYTMxNzgwYmYtYjI3Ni00ZDliLTlmNmItMmZiNDU5YmFhNDdhIiwicm9sZXMiOlsiQXBwbGljYXRpb25cL0VkaXRvciIsImV2ZXJ5b25lIl0sImlzcyI6Imh0dHBzOlwvXC9sb2NhbGhvc3Q6OTQ0M1wvb2F1dGgyXC90b2tlbiIsImdpdmVuX25hbWUiOiJzdHJpbmciLCJ1c2VyTmFtZSI6InN0cmluZyIsImNsaWVudF9pZCI6Im9mRmZzU2FMckY0VmVjX280ZHNBd1NXUzcya2EiLCJhdWQiOiJvZkZmc1NhTHJGNFZlY19vNGRzQXdTV1M3MmthIiwibmJmIjoxNzQ2NDQ1OTI5LCJhenAiOiJvZkZmc1NhTHJGNFZlY19vNGRzQXdTV1M3MmthIiwic2NvcGUiOiJvcGVuaWQiLCJwaG9uZV9udW1iZXIiOiI3ODk0NTYxMjMwIiwiZXhwIjoxNzQ2NDQ5NTI5LCJpYXQiOjE3NDY0NDU5MjksImZhbWlseV9uYW1lIjoic3RyaW5nIiwianRpIjoiMGZhN2VkMGEtZWU3Ny00YzQ2LThiYjUtMGMzODljOWEyYzI1IiwiZW1haWwiOiJzdHJpbmdAZ21haWwuY29tIn0.ZeZXoHWrEORJZ23UNMYotN6r6hBBrzULxjWlY0aT6UqZHM1T8oj6VO0tq1GPPjPXT042ilXdOsW8-NXgQD1AMhtie3MQYNDZ0MK8nQQ5wyoGYn81hVILA-sSZJAGbIPzognznDV2kFkznTmmQrvywiKP4hN1Gf1cmw5p2J7fvvg9BvK_zqSjVBMZk3DbmGRkp8cKTlViyXGDNfDEqWFAtAICNexYkzIS5WMSVoGc8UA_a5uzK223_FqXEApq3QL2FJWAN9GOmZOXp4xKsgTTMxRJ_lIuIIqq8_Ji-xXcsQIvHiio1ZzYi-BBNUCCBJbROxAfqeQTHve0YtKvGvQ5Jw
+
+axon:
+  axonserver:
+    servers: ${AXON_SERVER_HOST:localhost}:${AXON_SERVER_PORT:8124}
+    enabled: true
+    component-name: weshopify-brands-service
+
+eureka:
+   client:
+      service-url:
+         defaultZone: http://${SERVICES_REGISTRY_HOST:localhost}:${SERVICES_REGISTRY_PORT:8761}/eureka	
+springdoc:
+   api-docs:
+      path: /v3/api-docs
+   swagger-ui:
+      path: /swagger-ui/index.html		
+logging:
+  pattern:
+    correlation: "[${spring.application.name:},%X{traceId:-},%X{spanId:-}] "
+  include-application-name: false
+#resilience4j:
+#  circuitbreaker:
+#    instances:
+#      brands-service-circuit: 
+##        event-consumer-buffer-size: 10
+#        permitted-number-of-calls-in-half-open-state: 2
+#        wait-duration-in-open-state: 30s
+#        failure-rate-threshold: 50
+#        minimum-number-of-calls: 5
+##        sliding-window-size: 5
+#        register-health-indicator: true
+
+
+ 
+
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+    instances:
+      brands-service-circuit:
+        base-config: default
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 2
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        automatic-transition-from-open-to-half-open-enabled: true
+  retry:
+    instances:
+      brands-service-retry:
+        max-attempts: 3
+        wait-duration: 15s

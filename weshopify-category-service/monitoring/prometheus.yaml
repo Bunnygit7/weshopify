@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'weshopify-category-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [localhost:5016]  # use localhost if running Prometheus natively port no:app-port

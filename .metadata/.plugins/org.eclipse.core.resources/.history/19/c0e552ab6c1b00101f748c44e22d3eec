@@ -1,7 +1,0 @@
-package com.weshopify.platform.beans;
-
-import java.io.Serializable;
-
-public class UserAuthnBean implements Serializable {
-
-}

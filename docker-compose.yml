@@ -1,0 +1,152 @@
+version: '3.9'
+
+services:
+
+  # ✅ MySQL for Category Service
+  wesh-categories-db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 0000
+      MYSQL_DATABASE: weshopify_app_categories
+    ports:
+      - "3307:3306"
+    volumes:
+      - category_db_data:/var/lib/mysql
+    networks:
+      - wesh-network
+
+  # ✅ Eureka Service Registry
+  wesh-services-registry:
+    image: bunnydoc/wesh-services-registry-img:latest
+    restart: on-failure
+    ports:
+      - "5011:8761"  # Host:Container
+    networks:
+      - wesh-network
+
+  # ✅ Redis (for caching)
+  wesh-category-redis:
+    image: redis:7
+    command: ["redis-server", "--requirepass", "Redis123$"]
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - wesh-network
+
+  # ✅ Axon Server
+  wesh-axon-server:
+    image: bunnydoc/my-axon-server-img:latest
+    ports:
+      - "8024:8024"  # Axon Dashboard
+      - "8124:8124"  # Axon Messaging Port
+      - "8224:8224"
+    restart: on-failure  
+    networks:
+      - wesh-network
+    environment:
+      - AXONIQ_AXONSERVER_STANDALONE=true
+
+      #USER_MANAGEMENT_SERVICE
+
+  wesh-user-mgmt-service:
+     image: bunnydoc/wesh-user-mgmt-service-img
+     ports:
+       - "5014:5014"
+     restart: on-failure
+     networks:
+       - "wesh-network"
+     environment:
+        USER_SWAGGER_PATH: /swagger-ui.html
+        WSO2_SERVER_HOST: host.docker.internal
+        WSO2_SERVER_PORT: 9443
+        WSO2_USER_NAME: admin
+        WSO2_USER_PASSWORD: admin
+# Authentation Service
+  wesh-auth-service:
+     image: bunnydoc/wesh-authn-service-img
+     ports:
+       - "5022:5022"
+     restart: on-failure
+     networks:
+       - wesh-network
+     environment:
+        AUTHN_REDIS_SERVER_HOST: wesh-category-redis
+        AUTHN_REDIS_SERVER_PORT: 6379
+        AUTHN_REDIS_SERVER_PASSWORD: Redis123$
+        # AUTHN_SERVICE_PORT: 5022
+        WSO2_CLIENTID: ofFfsSaLrF4Vec_o4dsAwSWS72ka
+        WSO2_CLIENT_SECRET: HEgOiwXoI1XRTp73d_m65S4pliIa
+        WSO2_SERVER_HOST: host.docker.internal
+        WSO2_SERVER_PORT: 9443
+        WSO2_GRANT_TYPE: password
+        WSO2_OAUTH2_SCOPE: openid
+
+  # BRAND SERVICE
+  wesh-brand-service:
+     image: bunnydoc/wesh-brand-service-img
+     ports:
+       - "5017:5017"
+     restart: on-failure
+     depends_on:
+       - "wesh-category-service"
+       - "wesh-services-registry"
+     networks:
+       - "wesh-network"
+     environment:
+        MONGO_DB_URI: mongodb+srv://mongo:mongo@cluster0.czfqryz.mongodb.net/
+        MONGO_DBAUTO_INDEX: true  
+        CATEGORIES_REDIS_HOST: wesh-category-redis
+        CATEGORIES_REDIS_PORT: 6379
+        CATEGORIES_REDIS_PASSWORD: Redis123$
+        # BRAND_SERVICE_PORT: 5017
+        CATEGORY_SERVICE_HOST: wesh-category-service
+        CATEGORY_SERVICE_PORT: 5016
+        AXON_SERVER_HOST: wesh-axon-server
+        AXON_SERVER_PORT: 8124
+        SERVICES_REGISTRY_HOST: wesh-services-registry
+        SERVICES_REGISTRY_PORT: 8761
+
+  # ✅ Category Service (Spring Boot App)
+  wesh-category-service:
+    image: bunnydoc/wesh-category-service-img:latest
+    restart: on-failure
+    depends_on:
+      - wesh-categories-db
+      - wesh-services-registry
+      - wesh-category-redis
+      - wesh-axon-server
+    ports:
+      - "5016:5016"
+    environment:
+      # MySQL
+      CATEGORIES_DB_TYPE: mysql
+      CATEGORIES_DB_HOST: wesh-categories-db
+      CATEGORIES_DB_PORT: 3306
+      CATEGORIES_DB_SCHEMA: weshopify_app_categories
+      CATEGORIES_DB_USERNAME: root
+      CATEGORIES_DB_PASSWORD: 0000
+      CATEGORIES_DB_DDL_AUTO: update
+
+      # Redis
+      CATEGORIES_REDIS_HOST: wesh-category-redis
+      CATEGORIES_REDIS_PORT: 6379
+      CATEGORIES_REDIS_PASSWORD: Redis123$
+
+      # Eureka
+      SERVICES_REGISTRY_HOST: wesh-services-registry
+      SERVICES_REGISTRY_PORT: 8761
+
+      # Axon
+      AXON_SERVER_HOST: wesh-axon-server
+      AXON_SERVER_PORT: 8124
+    networks:
+      - wesh-network
+
+volumes:
+  category_db_data:
+
+networks:
+  wesh-network:
+

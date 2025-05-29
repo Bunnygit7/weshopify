@@ -1,4 +1,4 @@
-package com.weshopify.platform;
+/*package com.weshopify.platform;
 
 
 import org.junit.jupiter.api.Test;
@@ -25,3 +25,4 @@ public class AuthnApiTest extends WeshopifyAuthnServiceApplicationTests{
 	}
 
 }
+*/

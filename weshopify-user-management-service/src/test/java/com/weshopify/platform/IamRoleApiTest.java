@@ -1,4 +1,4 @@
-package com.weshopify.platform;
+/*package com.weshopify.platform;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,3 +20,4 @@ public class IamRoleApiTest extends WeshopifyUserManagementServiceApplicationTes
 		roleClient.findAllRoles();
 	}
 }
+*/

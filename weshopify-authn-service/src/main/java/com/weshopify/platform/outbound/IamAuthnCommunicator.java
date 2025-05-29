@@ -3,13 +3,8 @@ package com.weshopify.platform.outbound;
 import java.util.Base64;
 import java.util.Optional;
 
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -35,8 +30,6 @@ public class IamAuthnCommunicator {
 	@Autowired
 	ObjectMapper objectMapper;
 
-	
-
 	@Value("${weshopify.oauth2.uri}")
 	private String authnUri;
 
@@ -55,13 +48,15 @@ public class IamAuthnCommunicator {
 	@Value("${weshopify.oauth2.logoutUri}")
 	private String logoutUri;
 
-	
+	@Value("${weshopify.oauth2.userInfo}")
+	private String userInfo;
+
 	public String authenticate(WSO2UserAuthnBean authnBean) {
 		String response = null;
-		
+
 		authnBean.setGrant_type(grantType);
 		authnBean.setScope(scope);
-		
+
 		try {
 			String payload = objectMapper.writeValueAsString(authnBean);
 			HttpEntity<String> requestBody = prepareRequestBody(payload);
@@ -70,7 +65,7 @@ public class IamAuthnCommunicator {
 
 			if (apiResponse.getStatusCode().value() == HttpStatus.OK.value()) {
 				response = apiResponse.getBody();
-				
+
 			}
 
 		} catch (JsonProcessingException e) {
@@ -121,6 +116,26 @@ public class IamAuthnCommunicator {
 		HttpEntity<String> requestBody = new HttpEntity<>(accessToken, headers);
 
 		return requestBody;
+	}
+
+	public String getUserInfo(String accesstoken) {
+		userInfo = userInfo + scope;
+		String responseData = null;
+		try {
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Authorization", "Bearer " + accesstoken);
+			HttpEntity<String> requestBody = new HttpEntity<String>(headers);
+			
+			ResponseEntity<String> apiResponse = restTemplate.exchange(userInfo, HttpMethod.GET, requestBody,
+					String.class);
+			if (apiResponse.getStatusCode().value() == HttpStatus.OK.value()) {
+				responseData = apiResponse.getBody();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Optional.ofNullable(responseData).get();
 	}
 
 }

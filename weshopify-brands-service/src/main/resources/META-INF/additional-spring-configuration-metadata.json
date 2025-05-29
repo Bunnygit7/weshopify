@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "service.categories.uri",
+    "type": "java.lang.String",
+    "description": "A description for 'service.categories.uri'"
+  },
+  {
+    "name": "service.categories.token",
+    "type": "java.lang.String",
+    "description": "A description for 'service.categories.token'"
+  }
+]}

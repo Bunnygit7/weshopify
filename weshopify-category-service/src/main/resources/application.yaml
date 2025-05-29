@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: weshopify-category-service
+  datasource:
+    url: jdbc:${CATEGORIES_DB_TYPE:mysql}://${CATEGORIES_DB_HOST:localhost}:${CATEGORIES_DB_PORT:3306}/${CATEGORIES_DB_SCHEMA:weshopify_app_categories}
+    username: ${CATEGORIES_DB_USERNAME:root}
+    password: ${CATEGORIES_DB_PASSWORD:0000}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: ${CATEGORIES_DB_DDL_AUTO:update}
+  data:
+    redis:
+      host: ${CATEGORIES_REDIS_HOST:localhost}
+      port: ${CATEGORIES_REDIS_PORT:6379}
+      password: "${CATEGORIES_REDIS_PASSWORD:Redis123$}"
+server:
+  port: 5016
+
+axon:
+  axonserver:
+    servers: ${AXON_SERVER_HOST:localhost}:${AXON_SERVER_PORT:8124}
+    enabled: true
+    component-name: weshopify-category-service
+eureka:
+  client:
+    service-url:
+       defaultZone: http://${SERVICES_REGISTRY_HOST:localhost}:${SERVICES_REGISTRY_PORT:8761}/eureka
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  tracing:
+    sampling:
+      probability: 1.0
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+logging:
+  pattern:
+    correlation: "[${spring.application.name:},%X{traceId:-},%X{spanId:-}] "
+  include-application-name: false

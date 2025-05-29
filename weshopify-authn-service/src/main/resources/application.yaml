@@ -2,16 +2,17 @@ spring:
   application:
     name: weshopify-authn-service
   redis:
-    host: localhost
-    port: 6379
-    password: Redis123$
+    host: ${AUTHN_REDIS_SERVER_HOST:localhost}
+    port: ${AUTHN_REDIS_SERVER_PORT:6379}
+    password: ${AUTHN_REDIS_SERVER_PASSWORD:Redis123$}
 server:
-  port: 5022
+  port: ${AUTHN_SERVICE_PORT:5022}
 weshopify:
    oauth2:
-      clientId: ofFfsSaLrF4Vec_o4dsAwSWS72ka
-      clientSecret: HEgOiwXoI1XRTp73d_m65S4pliIa
-      grantType: password
-      scope: openid
-      uri: https://localhost:9443/oauth2/token
-      logoutUri: https://localhost:9443/oauth2/revoke
+      clientId: ${WSO2_CLIENTID:ofFfsSaLrF4Vec_o4dsAwSWS72ka}
+      clientSecret: ${WSO2_CLIENT_SECRET:HEgOiwXoI1XRTp73d_m65S4pliIa}
+      userInfo: https://${WSO2_SERVER_HOST:localhost}:${WSO2_SERVER_PORT:9443}/oauth2/userinfo?schems=
+      grantType: ${WSO2_GRANT_TYPE:password}
+      scope: ${WSO2_OAUTH2_SCOPE:openid}
+      uri: https://${WSO2_SERVER_HOST:localhost}:${WSO2_SERVER_PORT:9443}/oauth2/token
+      logoutUri: https://${WSO2_SERVER_HOST:localhost}:${WSO2_SERVER_PORT:9443}/oauth2/revoke

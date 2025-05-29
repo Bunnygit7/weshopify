@@ -1,7 +1,0 @@
-package com.weshopify.platform.model;
-
-import java.io.Serializable;
-
-public class WSO2UserAuthnBean implements Serializable {
-
-}
