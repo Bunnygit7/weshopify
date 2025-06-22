@@ -80,6 +80,7 @@ npm install && npm start
 Visit http://localhost:3000 (frontend) and http://localhost:8080/... (backend APIs)
 
 📈 Monitoring & Logging
+
 Once services are running:
 
 Kibana: http://localhost:5601 (view logs)
@@ -89,17 +90,17 @@ Prometheus: http://localhost:9090 (metrics)
 Grafana: http://localhost:3001 (dashboards)
 
 🔮 Roadmap
+
 📍 User-friendly UX enhancements (product reviews, wishlists)
 
 📧 SMS/email notifications for orders
 
 🧪 End-to-end testing & CI/CD pipeline
 
-☁️ Deployment on Kubernetes or AWS ECS
+☁️ Deployment on AWS ECS
 
 👨‍💻 Author
-Brought to you by Bunny Bathula
-🔗 LinkedIn  |  🌐 Portfolio
+Brought to you by BSP
 
 📜 License
 Distributed under the MIT License. Contribute and enjoy! 🚀
