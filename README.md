@@ -68,7 +68,7 @@
 # 1. Clone the repo
 git clone https://github.com/Bunnygit7/weshopify.git
 cd weshopify
-
+```
 # 2. Configure databases and IAM in each microservice's application.properties
 # 3. (Optional) Add AWS S3 credentials
 # 4. Start services with Docker Compose
