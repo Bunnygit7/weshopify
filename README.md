@@ -37,10 +37,15 @@
 ## 📂 Project Structure
 
 /frontend ← React customer/admin dashboards
+
 /backend ← Spring Boot microservices
+
 ├── user ← User & auth management
+
 ├── product ← Category/brand/product APIs + AWS S3
+
 ├── order ← Order placement & querying
+
 └── config ← Common configs (WSO2, DB, logging)
 
 /infrastructure ← Docker compose or deployment scripts
